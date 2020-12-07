@@ -1,4 +1,5 @@
 from string import punctuation
+from nltk.corpus.reader.util import find_corpus_fileids
 from pymystem3 import Mystem
 from nltk.corpus import stopwords
 import nltk
@@ -64,7 +65,7 @@ def checkLevel(text, level):
     return len(dataset.intersection(words_a2)) / len(dataset)
 
 
-def count_words(words):
+def countWords(words):
     counted = {}
     for word in words:
         counted.setdefault(word, 0)
@@ -73,45 +74,84 @@ def count_words(words):
 
 
 def checkFrequency(text):
-    x = count_words(text)
+    x = countWords(text)
     res = {k: v for k, v in sorted(
         x.items(), key=lambda item: item[1], reverse=True)}
     return res
+
+
+def findIntersection(text1, text2):
+    text1_set = set(text1)
+    text2_set = set(text2)
+    inters = text1_set.intersection(text2_set)
+    return sorted(list(inters))
+
+
+def getSortedList(text):
+    return sorted(list(set(text)))
 
 
 @app.route('/api/', methods=["POST"])
 def main_interface():
     response = request.get_json()
     result = {}
-    result1 = sorted(preprocess_text(response['text1']))
-    result2 = sorted(preprocess_text(response['text2']))
-    result1_set = set(result1)
-    result2_set = set(result2)
-    result['result1_a1'] = ''
-    result['result1_a2'] = ''
-    result['result2_a1'] = ''
-    result['result2_a2'] = ''
-    checkboxLevel = response['checkboxLevel']
-    if checkboxLevel:
-        result['result1_a1'] = checkLevel(result1, 'a1')
-        result['result1_a2'] = checkLevel(result1, 'a2')
-        result['result2_a1'] = checkLevel(result2, 'a1')
-        result['result2_a2'] = checkLevel(result2, 'a2')
-    checkboxFrequency = response['checkboxFrequency']
-    checkboxTranslate = response['checkboxTranslate']
-    if checkboxFrequency:
-        result['result1'] = checkFrequency(result1)
-        result['result2'] = checkFrequency(result2)
-    else:
-        result['result1'] = sorted(list(result1_set))
-        result['result2'] = sorted(list(result2_set))
-    if checkboxTranslate:
-        result['result1'] = translate(sorted(list(result1_set)))
-        result['result2'] = translate(sorted(list(result2_set)))
+    text1 = sorted(preprocess_text(response['text1']))
+    text2 = sorted(preprocess_text(response['text2']))
+    result['text1'] = getSortedList(text1)
+    result['text2'] = getSortedList(text2)
     result['intersection'] = []
-    if len(result2) > 0:
-        inters = result1_set.intersection(result2_set)
-        result['intersection'] = sorted(list(inters))
+    if len(text2) > 0:
+        result['intersection'] = findIntersection(text1, text2)
+    return jsonify(result)
+
+
+@app.route('/api/freq/', methods=["POST"])
+def freq_interface():
+    response = request.get_json()
+    result = {}
+    text1 = sorted(preprocess_text(response['text1']))
+    text2 = sorted(preprocess_text(response['text2']))
+    result['text1'] = checkFrequency(text1)
+    result['text2'] = checkFrequency(text2)
+    result['intersection'] = []
+    if len(text2) > 0:
+        result['intersection'] = findIntersection(text1, text2)
+    return jsonify(result)
+
+
+@app.route('/api/lex/', methods=["POST"])
+def lex_interface():
+    response = request.get_json()
+    result = {}
+    text1 = sorted(preprocess_text(response['text1']))
+    text2 = sorted(preprocess_text(response['text2']))
+    result['text1'] = getSortedList(text1)
+    result['text2'] = getSortedList(text2)
+    result['text1_a1'] = ''
+    result['text1_a2'] = ''
+    result['text2_a1'] = ''
+    result['text2_a2'] = ''
+    result['text1_a1'] = checkLevel(text1, 'a1')
+    result['text1_a2'] = checkLevel(text1, 'a2')
+    result['text2_a1'] = checkLevel(text2, 'a1')
+    result['text2_a2'] = checkLevel(text2, 'a2')
+    result['intersection'] = []
+    if len(text2) > 0:
+        result['intersection'] = findIntersection(text1, text2)
+    return jsonify(result)
+
+
+@app.route('/api/dict/', methods=["POST"])
+def dict_interface():
+    response = request.get_json()
+    result = {}
+    text1 = sorted(preprocess_text(response['text1']))
+    text2 = sorted(preprocess_text(response['text2']))
+    result['text1'] = translate(getSortedList(text1))
+    result['text2'] = translate(getSortedList(text2))
+    result['intersection'] = []
+    if len(text2) > 0:
+        result['intersection'] = findIntersection(text1, text2)
     return jsonify(result)
 
 
@@ -125,4 +165,3 @@ def add_headers(response):
 
 if __name__ == '__main__':
     app.run(debug=True)
-
