@@ -28,7 +28,7 @@ $('document').ready(() => {
     // 1 - regular; 2 - frequency; 3 - lexical minimums; 4 - RU-ENG
     if (option === '1') {
       $.ajax({
-        url: 'http://localhost:5000/api/',
+        url: 'https://johanla0.pythonanywhere.com/api/',
         type: 'POST',
         contentType: 'application/json',
         data: JSON.stringify({
@@ -47,7 +47,7 @@ $('document').ready(() => {
     }
     if (option === '2') {
       $.ajax({
-        url: 'http://localhost:5000/api/freq/',
+        url: 'https://johanla0.pythonanywhere.com/api/freq/',
         type: 'POST',
         contentType: 'application/json',
         data: JSON.stringify({
@@ -66,7 +66,7 @@ $('document').ready(() => {
     }
     if (option === '3') {
       $.ajax({
-        url: 'http://localhost:5000/api/lex/',
+        url: 'https://johanla0.pythonanywhere.com/api/lex/',
         type: 'POST',
         contentType: 'application/json',
         data: JSON.stringify({
@@ -91,7 +91,7 @@ $('document').ready(() => {
     }
     if (option === '4') {
       $.ajax({
-        url: 'http://localhost:5000/api/dict/',
+        url: 'https://johanla0.pythonanywhere.com/api/dict/',
         type: 'POST',
         contentType: 'application/json',
         data: JSON.stringify({
