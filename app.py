@@ -16,7 +16,8 @@ nltk.download('stopwords')
 # Create lemmatizer and stopwords list
 mystem = Mystem()
 russian_stopwords = stopwords.words('russian')
-# Preprocess function
+
+nltk.download('averaged_perceptron_tagger_ru')
 
 
 def preprocessText(text):
@@ -28,6 +29,12 @@ def preprocessText(text):
     return tokens
 
 
+def getPOS(tokens):
+    tags = nltk.pos_tag(tokens, lang='rus')
+    print(tags)
+    return tags
+
+
 def translate(words, targetLanguageCode='en'):
     translated = {}
     if len(words) == 0:
@@ -36,6 +43,7 @@ def translate(words, targetLanguageCode='en'):
     #     app_key
     # r = requests.post(url)
     # responseData = r.json()
+    # ['ru-be', 'ru-bg', 'ru-cs', 'ru-da', 'ru-de', 'ru-el', 'ru-en', 'ru-es', 'ru-et', 'ru-fi', 'ru-fr', 'ru-hu', 'ru-it', 'ru-lt', 'ru-lv', 'ru-mhr', 'ru-mrj', 'ru-nl', 'ru-no', 'ru-pl', 'ru-pt', 'ru-ru', 'ru-sk', 'ru-sv', 'ru-tr', 'ru-tt', 'ru-uk', 'ru-zh']
 
     for word in words:
         translated.setdefault(word, '')
@@ -86,6 +94,12 @@ def checkFrequency(text):
     return res
 
 
+def getSortedByValue(dictionary):
+    res = {k: v for k, v in sorted(
+        dictionary.items(), key=lambda item: item[1])}
+    return res
+
+
 def findIntersection(text1, text2):
     text1_set = set(text1)
     text2_set = set(text2)
@@ -101,8 +115,8 @@ def getSortedList(text):
 def main_interface():
     response = request.get_json()
     result = {}
-    text1 = sorted(preprocessText(response['text1']))
-    text2 = sorted(preprocessText(response['text2']))
+    text1 = preprocessText(response['text1'])
+    text2 = preprocessText(response['text2'])
     result['text1'] = getSortedList(text1)
     result['text2'] = getSortedList(text2)
     result['intersection'] = []
@@ -115,8 +129,8 @@ def main_interface():
 def freq_interface():
     response = request.get_json()
     result = {}
-    text1 = sorted(preprocessText(response['text1']))
-    text2 = sorted(preprocessText(response['text2']))
+    text1 = preprocessText(response['text1'])
+    text2 = preprocessText(response['text2'])
     result['text1'] = checkFrequency(text1)
     result['text2'] = checkFrequency(text2)
     result['intersection'] = []
@@ -129,8 +143,8 @@ def freq_interface():
 def lex_interface():
     response = request.get_json()
     result = {}
-    text1 = sorted(preprocessText(response['text1']))
-    text2 = sorted(preprocessText(response['text2']))
+    text1 = preprocessText(response['text1'])
+    text2 = preprocessText(response['text2'])
     result['text1'] = getSortedList(text1)
     result['text2'] = getSortedList(text2)
     result['text1_a1'] = ''
@@ -151,12 +165,28 @@ def lex_interface():
 def dict_interface():
     response = request.get_json()
     result = {}
-    text1 = sorted(preprocessText(response['text1']))
-    text2 = sorted(preprocessText(response['text2']))
+    text1 = preprocessText(response['text1'])
+    text2 = preprocessText(response['text2'])
     targetLanguageCode = 'en'
     targetLanguageCode = response['targetLanguageCode']
     result['text1'] = translate(getSortedList(text1), targetLanguageCode)
     result['text2'] = translate(getSortedList(text2), targetLanguageCode)
+    result['intersection'] = []
+    if len(text2) > 0:
+        result['intersection'] = findIntersection(text1, text2)
+    return jsonify(result)
+
+
+@app.route('/api/pos/', methods=["POST"])
+def pos_interface():
+    response = request.get_json()
+    result = {}
+    text1 = preprocessText(response['text1'])
+    text2 = preprocessText(response['text2'])
+    text1POS = getPOS(getSortedList(text1))
+    text2POS = getPOS(getSortedList(text2))
+    result['text1'] = getSortedByValue(dict((x, y) for x, y in text1POS))
+    result['text2'] = getSortedByValue(dict((x, y) for x, y in text2POS))
     result['intersection'] = []
     if len(text2) > 0:
         result['intersection'] = findIntersection(text1, text2)

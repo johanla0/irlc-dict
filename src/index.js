@@ -28,7 +28,7 @@ $('document').ready(() => {
     // 1 - regular; 2 - frequency; 3 - lexical minimums; 4 - dictionary
     if (option === '1') {
       $.ajax({
-        url: 'http://localhost:5000/api/',
+        url: 'https://johanla0.pythonanywhere.com/api/',
         type: 'POST',
         contentType: 'application/json',
         data: JSON.stringify({
@@ -47,7 +47,7 @@ $('document').ready(() => {
     }
     if (option === '2') {
       $.ajax({
-        url: 'http://localhost:5000/api/freq/',
+        url: 'https://johanla0.pythonanywhere.com/api/freq/',
         type: 'POST',
         contentType: 'application/json',
         data: JSON.stringify({
@@ -66,7 +66,7 @@ $('document').ready(() => {
     }
     if (option === '3') {
       $.ajax({
-        url: 'http://localhost:5000/api/lex/',
+        url: 'https://johanla0.pythonanywhere.com/api/lex/',
         type: 'POST',
         contentType: 'application/json',
         data: JSON.stringify({
@@ -94,7 +94,7 @@ $('document').ready(() => {
       targetLanguageCode = $('#targetLanguageCode').val();
       if (targetLanguageCode.length === 0) { targetLanguageCode = 'en'; }
       $.ajax({
-        url: 'http://localhost:5000/api/dict/',
+        url: 'https://johanla0.pythonanywhere.com/api/dict/',
         type: 'POST',
         contentType: 'application/json',
         data: JSON.stringify({
@@ -106,6 +106,27 @@ $('document').ready(() => {
         $('#result1').empty();
         $('#result2').empty();
         $('#intersection').empty();
+        $('#result1').append(result1.replace(/,/g, '\r\n'));
+        $('#result2').append(result2.replace(/,/g, '\r\n'));
+        $('#intersection').append(data.intersection.join('\r\n'));
+      });
+    }
+    if (option === '5') {
+      $.ajax({
+        url: 'https://johanla0.pythonanywhere.com/api/pos/',
+        type: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify({
+          text1, text2,
+        }),
+      }).done((data) => {
+        const result1 = JSON.stringify(data.text1).replace(/["[\]{}]*/g, '');
+        const result2 = JSON.stringify(data.text2).replace(/["[\]{}]*/g, '');
+        $('#result1').empty();
+        $('#result2').empty();
+        $('#intersection').empty();
+        // result1 = result1.replace(/,(?=[A-z])/g, ':');
+        // result2 = result2.replace(/,(?=[A-z])/g, ':');
         $('#result1').append(result1.replace(/,/g, '\r\n'));
         $('#result2').append(result2.replace(/,/g, '\r\n'));
         $('#intersection').append(data.intersection.join('\r\n'));
