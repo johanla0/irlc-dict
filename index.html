@@ -7,8 +7,8 @@
       content="width=device-width, initial-scale=1, shrink-to-fit=no"
     />
     <script src="./main.js"></script>
-    <link rel="stylesheet" href="./bootstrap.min.css" />
-    <link rel="stylesheet" href="./mystyle.css" />
+    <link rel="stylesheet" href="./css/bootstrap.min.css" />
+    <link rel="stylesheet" href="./css/mystyle.css" />
   </head>
   <body>
     <div class="container">
@@ -165,34 +165,49 @@
           <div class="form-check">
             <input
               class="form-check-input"
-              type="checkbox"
-              value=""
-              id="checkboxFrequency"
+              type="radio"
+              id="radioRegular"
+              name="options"
+              value="1"
+              checked
             />
-            <label class="form-check-label" for="checkboxFrequency">
-              Частотность
+            <label class="form-check-label" for="radioRegular"> Словник </label>
+          </div>
+          <div class="form-check">
+            <input
+              class="form-check-input"
+              type="radio"
+              id="radioFrequency"
+              name="options"
+              value="2"
+            />
+            <label class="form-check-label" for="radioFrequency">
+              Словник с частотностью (по убыванию)
             </label>
           </div>
           <div class="form-check">
             <input
               class="form-check-input"
-              type="checkbox"
-              value=""
-              id="checkboxLevel"
+              type="radio"
+              id="radioLevel"
+              name="options"
+              value="3"
             />
-            <label class="form-check-label" for="checkboxLevel">
-              Соответствие лекс. минимумам
+            <label class="form-check-label" for="radioLevel">
+              Соответствие лекс. минимумам А1, А2
             </label>
           </div>
           <div class="form-check">
             <input
               class="form-check-input"
-              type="checkbox"
-              value=""
-              id="checkboxTranslate"
+              type="radio"
+              id="radioTranslate"
+              name="options"
+              value="4"
             />
-            <label class="form-check-label" for="checkboxTranslate">
-              Добавить значение на английском языке
+            <label class="form-check-label" for="radioTranslate">
+              Русско-английский словарь (время загрузки зависит от размера
+              текста)
             </label>
           </div>
           <div class="form-check">
@@ -204,13 +219,13 @@
               disabled
             />
             <label class="form-check-label" for="checkboxStress">
-              Ударения
+              Расставить ударения
             </label>
           </div>
         </div>
         <div class="col-12 col-lg-4">
           <button id="send" class="btn btn-primary float-right mt-1 mb-4">
-            Генерировать словарь
+            Отправить
           </button>
         </div>
         <div class="col-12 col-lg-4">
