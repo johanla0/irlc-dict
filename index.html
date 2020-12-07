@@ -205,10 +205,20 @@
               name="options"
               value="4"
             />
-            <label class="form-check-label" for="radioTranslate">
-              Русско-английский словарь (время загрузки зависит от размера
-              текста)
+            <label
+              class="form-check-label"
+              for="radioTranslate"
+              title="В формате ISO 639-1: 'be', 'bg', 'cs', 'da', 'de', 'el', 'en', 'es', 'et', 'fi', 'fr', 'hu', 'it', 'lt', 'lv', 'mhr', 'mrj', 'nl', 'no', 'pl', 'pt', 'ru', 'sk', 'sv', 'tr', 'tt', 'uk', 'zh'"
+            >
+              Словарь (время загрузки зависит от размера текста)
             </label>
+            <input
+              type="text"
+              name="targetLanguageCode"
+              id="targetLanguageCode"
+              class="form-control"
+              placeholder="В формате ISO 639-1, например: en, zh..."
+            />
           </div>
           <div class="form-check">
             <input
@@ -237,8 +247,8 @@
       <div class="row">
         <div class="col-12 mt-5">
           <p>
-            О доступных словарях: 10,000 слов в сутки. Используйте словарь
-            рационально.
+            О доступных словарях: Яндекс.Словарь предоставляет 10,000 запросов в
+            сутки. Используйте словарь рационально.
           </p>
           <p>
             Реализовано с помощью сервиса

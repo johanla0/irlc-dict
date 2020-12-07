@@ -25,10 +25,10 @@ $('document').ready(() => {
     const text1 = $('#text1').val();
     const text2 = $('#text2').val();
     const option = $('input[name="options"]:checked').val();
-    // 1 - regular; 2 - frequency; 3 - lexical minimums; 4 - RU-ENG
+    // 1 - regular; 2 - frequency; 3 - lexical minimums; 4 - dictionary
     if (option === '1') {
       $.ajax({
-        url: 'https://johanla0.pythonanywhere.com/api/',
+        url: 'http://localhost:5000/api/',
         type: 'POST',
         contentType: 'application/json',
         data: JSON.stringify({
@@ -47,7 +47,7 @@ $('document').ready(() => {
     }
     if (option === '2') {
       $.ajax({
-        url: 'https://johanla0.pythonanywhere.com/api/freq/',
+        url: 'http://localhost:5000/api/freq/',
         type: 'POST',
         contentType: 'application/json',
         data: JSON.stringify({
@@ -66,7 +66,7 @@ $('document').ready(() => {
     }
     if (option === '3') {
       $.ajax({
-        url: 'https://johanla0.pythonanywhere.com/api/lex/',
+        url: 'http://localhost:5000/api/lex/',
         type: 'POST',
         contentType: 'application/json',
         data: JSON.stringify({
@@ -90,12 +90,15 @@ $('document').ready(() => {
       });
     }
     if (option === '4') {
+      let targetLanguageCode = '';
+      targetLanguageCode = $('#targetLanguageCode').val();
+      if (targetLanguageCode.length === 0) { targetLanguageCode = 'en'; }
       $.ajax({
-        url: 'https://johanla0.pythonanywhere.com/api/dict/',
+        url: 'http://localhost:5000/api/dict/',
         type: 'POST',
         contentType: 'application/json',
         data: JSON.stringify({
-          text1, text2,
+          text1, text2, targetLanguageCode,
         }),
       }).done((data) => {
         const result1 = JSON.stringify(data.text1).replace(/["[\]{}]*/g, '');

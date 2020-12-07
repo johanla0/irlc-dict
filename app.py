@@ -5,21 +5,21 @@ from nltk.corpus import stopwords
 import nltk
 from flask import Flask, request, jsonify
 import requests
-app_key = ""
+app_key = ''
 
 app = Flask(__name__)
 app.config['JSON_SORT_KEYS'] = False
 
 # download stopwords corpus, you need to run it once
-nltk.download("stopwords")
+nltk.download('stopwords')
 #--------#
 # Create lemmatizer and stopwords list
 mystem = Mystem()
-russian_stopwords = stopwords.words("russian")
+russian_stopwords = stopwords.words('russian')
 # Preprocess function
 
 
-def preprocess_text(text):
+def preprocessText(text):
     tokens = mystem.lemmatize(text.lower())
     tokens = [token for token in tokens if token not in russian_stopwords
               and token != " "
@@ -28,19 +28,25 @@ def preprocess_text(text):
     return tokens
 
 
-def translate(words):
+def translate(words, targetLanguageCode='en'):
     translated = {}
+    if len(words) == 0:
+        return
+    # url = "https://dictionary.yandex.net/api/v1/dicservice.json/getLangs?key=" + \
+    #     app_key
+    # r = requests.post(url)
+    # responseData = r.json()
+
     for word in words:
         translated.setdefault(word, '')
-        source_language_code = "ru"
-        target_language_code = "en"
-        url = "https://dictionary.yandex.net/api/v1/dicservice.json/lookup?key=" + \
-            app_key + "&lang=" + source_language_code + "-" + \
-            target_language_code + "&text=" + word.lower()
+        sourceLanguageCode = 'ru'
+        url = 'https://dictionary.yandex.net/api/v1/dicservice.json/lookup?key=' + \
+            app_key + '&lang=' + sourceLanguageCode + '-' + \
+            targetLanguageCode + '&text=' + word.lower()
         r = requests.post(url)
-        response_data = r.json()
+        responseData = r.json()
         try:
-            translated[word] = response_data['def'][0]['tr'][0]['text']
+            translated[word] = responseData['def'][0]['tr'][0]['text']
         except:
             continue
     return translated
@@ -95,8 +101,8 @@ def getSortedList(text):
 def main_interface():
     response = request.get_json()
     result = {}
-    text1 = sorted(preprocess_text(response['text1']))
-    text2 = sorted(preprocess_text(response['text2']))
+    text1 = sorted(preprocessText(response['text1']))
+    text2 = sorted(preprocessText(response['text2']))
     result['text1'] = getSortedList(text1)
     result['text2'] = getSortedList(text2)
     result['intersection'] = []
@@ -109,8 +115,8 @@ def main_interface():
 def freq_interface():
     response = request.get_json()
     result = {}
-    text1 = sorted(preprocess_text(response['text1']))
-    text2 = sorted(preprocess_text(response['text2']))
+    text1 = sorted(preprocessText(response['text1']))
+    text2 = sorted(preprocessText(response['text2']))
     result['text1'] = checkFrequency(text1)
     result['text2'] = checkFrequency(text2)
     result['intersection'] = []
@@ -123,8 +129,8 @@ def freq_interface():
 def lex_interface():
     response = request.get_json()
     result = {}
-    text1 = sorted(preprocess_text(response['text1']))
-    text2 = sorted(preprocess_text(response['text2']))
+    text1 = sorted(preprocessText(response['text1']))
+    text2 = sorted(preprocessText(response['text2']))
     result['text1'] = getSortedList(text1)
     result['text2'] = getSortedList(text2)
     result['text1_a1'] = ''
@@ -145,10 +151,12 @@ def lex_interface():
 def dict_interface():
     response = request.get_json()
     result = {}
-    text1 = sorted(preprocess_text(response['text1']))
-    text2 = sorted(preprocess_text(response['text2']))
-    result['text1'] = translate(getSortedList(text1))
-    result['text2'] = translate(getSortedList(text2))
+    text1 = sorted(preprocessText(response['text1']))
+    text2 = sorted(preprocessText(response['text2']))
+    targetLanguageCode = 'en'
+    targetLanguageCode = response['targetLanguageCode']
+    result['text1'] = translate(getSortedList(text1), targetLanguageCode)
+    result['text2'] = translate(getSortedList(text2), targetLanguageCode)
     result['intersection'] = []
     if len(text2) > 0:
         result['intersection'] = findIntersection(text1, text2)
