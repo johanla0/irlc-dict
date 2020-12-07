@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <script src="./main.js"></script>
+    <link rel="stylesheet" href="./css/bootstrap.min.css" />
+    <link rel="stylesheet" href="./css/mystyle.css" />
+  </head>
+  <body>
+    <div class="container">
+      <div class="row">
+        <div class="col-12 font-weight-bold">
+          <h1 class="h3 mt-2 mb-3">Cловник, частотность, пересечения</h1>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12 col-lg-8">
+          <ul class="nav nav-tabs" id="tabText" role="tablist">
+            <li class="nav-item" role="presentation">
+              <a
+                class="nav-link active"
+                id="nav-text1-tab"
+                data-toggle="tab"
+                href="#nav-text1"
+                role="tab"
+                aria-controls="nav-text1"
+                aria-selected="true"
+                >Текст 1</a
+              >
+            </li>
+            <li class="nav-item" role="presentation">
+              <a
+                class="nav-link"
+                id="nav-text2-tab"
+                data-toggle="tab"
+                href="#nav-text2"
+                role="tab"
+                aria-controls="nav-text2"
+                aria-selected="false"
+                >Текст 2</a
+              >
+            </li>
+            <li class="nav-item" role="presentation">
+              <a
+                class="nav-link disabled"
+                id="nav-addText-tab"
+                data-toggle="tab"
+                href="#nav-addText"
+                role="tab"
+                aria-controls="nav-addText"
+                aria-selected="false"
+                >+</a
+              >
+            </li>
+          </ul>
+          <div class="tab-content" id="nav-tabContent">
+            <div
+              class="tab-pane active"
+              id="nav-text1"
+              role="tabpanel"
+              aria-labelledby="nav-text1-tab"
+            >
+              <textarea id="text1" class="form-control shadow mb-3"></textarea>
+            </div>
+            <div
+              class="tab-pane"
+              id="nav-text2"
+              role="tabpanel"
+              aria-labelledby="nav-text2-tab"
+            >
+              <textarea id="text2" class="form-control shadow mb-3"></textarea>
+            </div>
+            <div
+              class="tab-pane"
+              id="nav-addText"
+              role="tabpanel"
+              aria-labelledby="nav-addText-tab"
+            >
+              # TODO: Add more than 2 texts
+            </div>
+          </div>
+        </div>
+        <div class="col-12 col-lg-4">
+          <ul class="nav nav-tabs" id="tabResult" role="tablist">
+            <li class="nav-item" role="presentation">
+              <a
+                class="nav-link active"
+                id="nav-result1-tab"
+                data-toggle="tab"
+                href="#nav-result1"
+                role="tab"
+                aria-controls="nav-result1"
+                aria-selected="true"
+                >Текст 1</a
+              >
+            </li>
+            <li class="nav-item" role="presentation">
+              <a
+                class="nav-link"
+                id="nav-result2-tab"
+                data-toggle="tab"
+                href="#nav-result2"
+                role="tab"
+                aria-controls="nav-result2"
+                aria-selected="false"
+                >Текст 2</a
+              >
+            </li>
+            <li class="nav-item" role="presentation">
+              <a
+                class="nav-link"
+                id="nav-intersection-tab"
+                data-toggle="tab"
+                href="#nav-intersection"
+                role="tab"
+                aria-controls="nav-intersection"
+                aria-selected="false"
+                >Пересечение</a
+              >
+            </li>
+          </ul>
+          <div class="tab-content" id="nav-tabContent">
+            <div
+              class="tab-pane active"
+              id="nav-result1"
+              role="tabpanel"
+              aria-labelledby="nav-result1-tab"
+            >
+              <textarea
+                id="result1"
+                class="form-control shadow mb-3"
+              ></textarea>
+            </div>
+            <div
+              class="tab-pane"
+              id="nav-result2"
+              role="tabpanel"
+              aria-labelledby="nav-result2-tab"
+            >
+              <textarea
+                id="result2"
+                class="form-control shadow mb-3"
+              ></textarea>
+            </div>
+            <div
+              class="tab-pane"
+              id="nav-intersection"
+              role="tabpanel"
+              aria-labelledby="nav-intersection-tab"
+            >
+              <textarea
+                id="intersection"
+                class="form-control shadow mb-3"
+              ></textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12 col-lg-4">
+          <div class="form-check">
+            <input
+              class="form-check-input"
+              type="checkbox"
+              value=""
+              id="checkboxFrequency"
+            />
+            <label class="form-check-label" for="checkboxFrequency">
+              Частотность
+            </label>
+          </div>
+          <div class="form-check">
+            <input
+              class="form-check-input"
+              type="checkbox"
+              value=""
+              id="checkboxLevel"
+            />
+            <label class="form-check-label" for="checkboxLevel">
+              Соответствие лекс. минимумам
+            </label>
+          </div>
+          <div class="form-check">
+            <input
+              class="form-check-input"
+              type="checkbox"
+              value=""
+              id="checkboxTranslate"
+            />
+            <label class="form-check-label" for="checkboxTranslate">
+              Добавить значение на английском языке
+            </label>
+          </div>
+          <div class="form-check">
+            <input
+              class="form-check-input"
+              type="checkbox"
+              value=""
+              id="checkboxStress"
+              disabled
+            />
+            <label class="form-check-label" for="checkboxStress">
+              Ударения
+            </label>
+          </div>
+        </div>
+        <div class="col-12 col-lg-4">
+          <button id="send" class="btn btn-primary float-right mt-1 mb-4">
+            Генерировать словарь
+          </button>
+        </div>
+        <div class="col-12 col-lg-4">
+          <button id="saveResult" class="btn btn-success float-right mt-1 mb-2">
+            Сохранить
+          </button>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
